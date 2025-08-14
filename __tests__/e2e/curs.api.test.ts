@@ -1,5 +1,7 @@
 import request from 'supertest';
 import { app, HTTP_STATUSES } from "../../src";
+import {CourseCreateInputModel} from "../../src/models/CreateCourseModel";
+import {CourseUpdateInputModel} from "../../src/models/UpdateCourseModel";
 
 describe('/course', () => {
     beforeAll(async () => {
@@ -19,9 +21,10 @@ describe('/course', () => {
     });
 
     it(`should not create course with incorrect input data`, async () => {
+        const data: CourseCreateInputModel = { title: '' };
         await request(app)
             .post('/courses')
-            .send({ title: '' })
+            .send(data)
             .expect(HTTP_STATUSES.BAD_REQUEST_400);
         await request(app)
             .get('/courses')
@@ -30,9 +33,10 @@ describe('/course', () => {
 
     let createCourse1:any = null;
     it(`should create course with correct input data`, async () => {
+        const data: CourseCreateInputModel = {title: 'it-incubator'};
         const createResponse =  await request(app)
             .post('/courses')
-            .send({ title: 'it-incubator' })
+            .send(data)
             .expect(HTTP_STATUSES.CREATE_201);
 
         createCourse1 = createResponse.body;
@@ -49,16 +53,18 @@ describe('/course', () => {
 
     let createCourse2:any = null;
     it(`should create more course`, async () => {
+
+        const data: CourseCreateInputModel = { title: 'it-incubator course 2' };
         const createResponse =  await request(app)
             .post('/courses')
-            .send({ title: 'it-incubator course 2' })
+            .send(data)
             .expect(HTTP_STATUSES.CREATE_201);
 
         createCourse2 = createResponse.body;
 
         expect(createCourse2).toEqual({
             id: expect.any(Number),
-            title: 'it-incubator course 2',
+            title: data.title
         });
 
         await request(app)
@@ -67,9 +73,12 @@ describe('/course', () => {
     });
 
     it(`should not update course with incorrect input data`, async () => {
+
+        const data: CourseUpdateInputModel = { title: '' };
+
         await request(app)
             .put('/courses/' + createCourse1.id)
-            .send({ title: '' })
+            .send(data)
             .expect(HTTP_STATUSES.BAD_REQUEST_400);
 
         await request(app)
@@ -78,16 +87,18 @@ describe('/course', () => {
     });
 
     it(`should not update course that not exist`, async () => {
+        const data: CourseUpdateInputModel = { title: 'good title' };
         await request(app)
             .put('/courses/' + -2222)
-            .send({ title: 'good title' })
+            .send(data)
             .expect(HTTP_STATUSES.NOT_FOUND_404);
     });
 
     it(`should update course`, async () => {
+        const data:CourseUpdateInputModel = { title: 'good new title' };
         await request(app)
             .put('/courses/' + createCourse1.id)
-            .send({ title: 'good new title' })
+            .send(data)
             .expect(HTTP_STATUSES.NO_CONTENT_204);
 
         await request(app)
