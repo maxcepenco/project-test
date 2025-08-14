@@ -1,5 +1,8 @@
 import express,{Request,Response} from 'express';
 import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQuery} from "./types";
+import {CourseCreateInputModel} from "./models/CreateCourseModel";
+import {CourseUpdateInputModel} from "./models/UpdateCourseModel";
+import {QueryCoursesModel} from "./models/QueryCoursesModel";
 
 export const app = express();
 const port = process.env.PORT || 3000;
@@ -31,7 +34,7 @@ export const db: {courses:CourseType[]}  = {
 }
 
 
-app.get('/courses', (req:RequestWithQuery<{title: string}>, res:Response<CourseType[]>) => {
+app.get('/courses', (req:RequestWithQuery<QueryCoursesModel>, res:Response<CourseType[]>) => {
     let foundCourses = db.courses
         if(req.query.title) {
             foundCourses =foundCourses.filter( c => c.title.indexOf(req.query.title as string) > -1 )
@@ -51,7 +54,7 @@ app.get('/courses/:id', (req:RequestWithParams<{id:string}>, res:Response) => {
 })
 
 
-app.post('/courses', (req:RequestWithBody<{title:string}>, res:Response<CourseType>) => {
+app.post('/courses', (req:RequestWithBody<CourseCreateInputModel>, res:Response<CourseType>) => {
     if(!req.body.title) {
         res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
         return;
@@ -73,7 +76,7 @@ app.delete('/courses/:id', (req:RequestWithParams<{id:string}>, res) => {
 })
 
 
-app.put('/courses/:id', (req:RequestWithParamsAndBody<{id:string},{title:string}>, res) => {
+app.put('/courses/:id', (req:RequestWithParamsAndBody<{id:string},CourseUpdateInputModel>, res) => {
     if(!req.body.title) {
         res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
         return;
