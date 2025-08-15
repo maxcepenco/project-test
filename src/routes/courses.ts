@@ -5,8 +5,23 @@ import {CourseViewModel} from "../models/CourseViewModel.js";
 import {UriParamsCourseModel} from "../models/UriParamsCourseModel";
 import {CourseCreateInputModel} from "../models/CreateCourseModel";
 import {CourseUpdateInputModel} from "../models/UpdateCourseModel";
-import { CourseType, db, getCourseViewModel, HTTP_STATUSES} from "../app";
+import {CourseType, db} from "../db/db";
 
+ export const HTTP_STATUSES = {
+    OK_200: 200,
+    CREATE_201: 201,
+    NO_CONTENT_204: 204,
+    BAD_REQUEST_400: 400,
+    NOT_FOUND_404: 404
+}
+
+
+export const getCourseViewModel = (dbCourse: CourseType) => {
+    return {
+        id: dbCourse.id,
+        title: dbCourse.title,
+    }
+}
 
 export const addCoursesRoutes = (app: Express) => {
     app.get('/courses', (req:RequestWithQuery<QueryCoursesModel>, res:Response<CourseViewModel[]>) => {
