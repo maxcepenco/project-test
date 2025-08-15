@@ -1,10 +1,4 @@
-import express, {Response} from "express";
-import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQuery} from "./types";
-import {QueryCoursesModel} from "./models/QueryCoursesModel";
-import {CourseViewModel} from "./models/CourseViewModel.js";
-import {UriParamsCourseModel} from "./models/UriParamsCourseModel";
-import {CourseCreateInputModel} from "./models/CreateCourseModel";
-import {CourseUpdateInputModel} from "./models/UpdateCourseModel";
+import express from "express";
 import {addCoursesRoutes} from "./routes/courses";
 
 export const app = express();

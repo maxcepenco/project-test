@@ -5,7 +5,7 @@ import {CourseViewModel} from "../models/CourseViewModel.js";
 import {UriParamsCourseModel} from "../models/UriParamsCourseModel";
 import {CourseCreateInputModel} from "../models/CreateCourseModel";
 import {CourseUpdateInputModel} from "../models/UpdateCourseModel";
-import {app, CourseType, db, getCourseViewModel, HTTP_STATUSES} from "../app";
+import { CourseType, db, getCourseViewModel, HTTP_STATUSES} from "../app";
 
 
 export const addCoursesRoutes = (app: Express) => {
